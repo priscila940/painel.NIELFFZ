@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini GSZIN</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #131314; /* Cor de fundo idêntica ao Gemini */
+            color: #e3e3e3;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 500;
+            color: #e3e3e3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .msg {
+            max-width: 85%;
+            line-height: 1.6;
+            font-size: 16px;
+            word-wrap: break-word;
+        }
+
+        .ia { align-self: flex-start; }
+        .user {
+            align-self: flex-end;
+            background-color: #37393b;
+            padding: 12px 20px;
+            border-radius: 20px;
+            color: #fff;
+        }
+
+        /* Área de Input estilo Gemini */
+        .input-wrapper {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .input-area {
+            background-color: #1e1f20;
+            border-radius: 30px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #e3e3e3;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .btn-icon:hover { color: #b4b4b4; }
+
+        input[type="text"] {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #e3e3e3;
+            font-size: 16px;
+            outline: none;
+            padding: 10px 0;
+        }
+
+        input[type="file"] { display: none; }
+
+        .preview-img {
+            max-width: 300px;
+            border-radius: 12px;
+            margin-top: 10px;
+            border: 1px solid #444;
+        }
+
+        code {
+            background-color: #000;
+            color: #8ab4f8;
+            padding: 15px;
+            display: block;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-family: 'Consolas', monospace;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span style="color: #4285f4;">●</span> GSZIN IA
+</header>
+
+<div id="chat-container">
+    <div class="msg ia">
+        Olá! Eu sou a <b>GSZIN IA</b>. <br><br>
+        Como posso te ajudar com seus scripts, offsets ou análise de código hoje? Você também pode me enviar um print da tela do jogo para eu analisar.
+    </div>
+</div>
+
+<div class="input-wrapper">
+    <div class="input-area">
+        <label class="btn-icon" title="Enviar Foto">
+            📷
+            <input type="file" id="file-input" accept="image/*" onchange="previewImage(event)">
+        </label>
+        
+        <input type="text" id="user-input" placeholder="Digite aqui sua pergunta...">
+        
+        <button class="btn-icon" onclick="enviarMensagem()" title="Enviar">
+            ➤
+        </button>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById('chat-container');
+
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                container.innerHTML += `
+                    <div class="msg user">
+                        <img src="${e.target.result}" class="preview-img">
+                    </div>
+                `;
+                rolarChat();
+                simularIA("Analisando sua imagem... Identifiquei padrões de memória no topo da tela. Você quer que eu extraia os Offsets desse print?");
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function enviarMensagem() {
+        const input = document.getElementById('user-input');
+        if (input.value.trim() === "") return;
+
+        const texto = input.value;
+        container.innerHTML += `<div class="msg user">${texto}</div>`;
+        input.value = "";
+        rolarChat();
+
+        // Lógica de resposta simulada
+        setTimeout(() => {
+            let resposta = "";
+            const p = texto.toLowerCase();
+
+            if (p.includes("script") || p.includes("lua")) {
+                resposta = "Aqui está um modelo de script LUA profissional para o que você pediu: <code>gg.clearResults()\ngg.searchNumber('1.0', gg.TYPE_FLOAT)\ngg.getResults(100)\ngg.editAll('999', gg.TYPE_FLOAT)\ngg.toast('GSZIN IA: SUCESSO')</code>";
+            } else {
+                resposta = "Entendi sua solicitação sobre '" + texto + "'. Para responder como o Gemini real, você pode conectar minha API Key. No momento, minha análise técnica sugere que você verifique a <b>libil2cpp.so</b>.";
+            }
+            
+            simularIA(resposta);
+        }, 1000);
+    }
+
+    function simularIA(texto) {
+        container.innerHTML += `<div class="msg ia"><b>GSZIN IA</b><br><br>${texto}</div>`;
+        rolarChat();
+    }
+
+    function rolarChat() {
+        container.scrollTop = container.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
