@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auxílio GSZIN</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); /* Fundo degradê Instagram */
+            color: #fff;
+            overflow: hidden; /* Evita barras de rolagem indesejadas */
+        }
+
+        /* Tela de Login */
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 320px;
+            max-width: 90%;
+            color: #333;
+        }
+
+        .login-container h1 {
+            font-family: 'Instagram Sans', 'Segoe UI', sans-serif; /* Fonte do Instagram */
+            font-size: 38px;
+            margin-bottom: 25px;
+            color: #262626;
+        }
+
+        .login-container .logo-insta {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .login-container input {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            margin-bottom: 15px;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #fafafa;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); /* Botão Instagram */
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-container button:hover {
+            opacity: 0.9;
+        }
+
+        .login-container .error-msg {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none; /* Escondido por padrão */
+        }
+
+        /* Painel de Funções (escondido por padrão) */
+        .dashboard-container {
+            display: none; /* Escondido até o login */
+            background-color: #1a1a1a; /* Fundo escuro */
+            border-radius: 15px;
+            padding: 25px;
+            width: 350px;
+            max-width: 90%;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .dashboard-header img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #333; /* Placeholder para imagem de perfil */
+        }
+        .dashboard-header .welcome-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #eee;
+        }
+
+        .status-card {
+            background-color: #dc2743; /* Vermelho do seu print */
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .status-card h2 {
+            margin-top: 0;
+            font-size: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+        .status-card .crown-icon {
+            font-size: 28px;
+            color: #ffD700; /* Dourado */
+        }
+        .status-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
+        }
+
+        .functions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Duas colunas */
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .function-item {
+            background-color: #2c2c2c; /* Fundo cinza escuro dos itens */
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .function-item .title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #eee;
+        }
+        .function-item .description {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #444; /* Cinza do switch desligado */
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #dc2743; /* Vermelho do switch ligado */
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #dc2743;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(20px);
+            -ms-transform: translateX(20px);
+            transform: translateX(20px);
+        }
+
+        /* Botão Iniciar Free Fire */
+        .start-button {
+            background-color: #dc2743; /* Vermelho do seu print */
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .start-button:hover {
+            background-color: #bd1f35;
+        }
+        .start-button .rocket-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container" id="loginScreen">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1200px-Instagram_icon.png" alt="Instagram Logo" class="logo-insta">
+        <h1>Instagram</h1>
+        
+        <input type="text" id="username" placeholder="Nome do usuário">
+        <input type="password" id="password" placeholder="Senha">
+        <button onclick="login()">Log In</button>
+        <p class="error-msg" id="errorMessage">Nome de usuário ou senha incorretos.</p>
+    </div>
+
+    <div class="dashboard-container" id="dashboardScreen">
+        <div class="dashboard-header">
+            <img src="https://via.placeholder.com/45" alt="Profile Icon"> <span class="welcome-text">Bem-vindo, GSZIN</span>
+            </div>
+
+        <div class="status-card">
+            <h2>STATUS DO PLANO <span style="font-size: 20px; color: #ffD700;">GSZIN <span class="crown-icon">👑</span></span></h2>
+            <div class="status-info">
+                <span>Vencimento</span>
+                <span>NaN dias</span> </div>
+            <div class="status-info">
+                <span>Licença</span>
+                <span>GSZIN-PRO</span> </div>
+        </div>
+
+        <div class="functions-grid">
+            <div class="function-item">
+                <span class="title">Aim 180°</span>
+                <span class="description">Full 180° Precision</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="function-item">
+                <span class="title">Fast Switch</span>
+                <span class="description">Troca Rápida</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="function-item">
+                <span class="title">No Recoil</span>
+                <span class="description">Tiro Perfeito</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="function-item">
+                <span class="title">Precisão</span>
+                <span class="description">Precision Full</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="function-item">
+                <span class="title">Sensibilidade Max</span>
+                <span class="description">Maximum Sensitivity</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="function-item">
+                <span class="title">Mira Scope</span>
+                <span class="description">Scope Precision</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="function-item">
+                <span class="title">Mira Branca</span>
+                <span class="description">No Scope Boost</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="function-item">
+                <span class="title">Headshot Boost</span>
+                <span class="description">High Head Accuracy</span>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button class="start-button">
+            <span class="rocket-icon">🚀</span> INICIAR FREE FIRE
+        </button>
+    </div>
+
+    <script>
+        function login() {
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Credenciais corretas
+            const correctUsername = "BYGSZIN";
+            const correctPassword = "auxilio3";
+
+            if (usernameInput === correctUsername && passwordInput === correctPassword) {
+                // Login bem-sucedido, esconde a tela de login e mostra o dashboard
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboardScreen').style.display = 'block';
+                document.body.style.background = '#000'; // Muda o fundo para o painel
+            } else {
+                // Credenciais incorretas, mostra mensagem de erro
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        // Você pode adicionar mais lógica aqui para quando os toggles forem ativados
+        // Por exemplo:
+        // document.querySelectorAll('.function-item input[type="checkbox"]').forEach(toggle => {
+        //     toggle.addEventListener('change', (event) => {
+        //         if (event.target.checked) {
+        //             console.log('Função ativada:', event.target.closest('.function-item').querySelector('.title').innerText);
+        //             // Aqui você enviaria um comando real para o jogo (via API ou websocket)
+        //         } else {
+        //             console.log('Função desativada:', event.target.closest('.function-item').querySelector('.title').innerText);
+        //         }
+        //     });
+        // });
+    </script>
+
+</body>
+</html>
