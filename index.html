@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nielffz - Painel VIP</title>
+    <style>
+        :root { 
+            --roxo-principal: #8b5cf6; 
+            --fundo-escuro: #0d0d0f; 
+            --sidebar-cor: #09090b; 
+        }
+        
+        body { 
+            background-color: transparent; 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        
+        /* Container Estilo image.png */
+        .painel {
+            width: 400px; 
+            height: 300px; 
+            background: var(--fundo-escuro);
+            border: 1px solid var(--roxo-principal); 
+            border-radius: 12px;
+            display: flex; 
+            overflow: hidden; 
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Sidebar Lateral */
+        .sidebar { 
+            width: 30%; 
+            background: var(--sidebar-cor); 
+            display: flex; 
+            flex-direction: column; 
+            border-right: 1px solid #222; 
+        }
+        
+        .tab-link { 
+            padding: 18px; 
+            color: #666; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 14px; 
+            transition: 0.3s; 
+            text-align: center;
+        }
+        
+        .tab-link.active { 
+            color: #fff; 
+            background: var(--roxo-principal); 
+            border-left: 4px solid #fff;
+        }
+
+        /* Área de Funções */
+        .main-content { 
+            flex: 1; 
+            padding: 20px; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .header-title { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 8px; 
+        }
+        
+        .header-title h3 { 
+            margin: 0; 
+            color: var(--roxo-principal); 
+            text-transform: uppercase; 
+            font-size: 18px;
+        }
+        
+        .tab-pane { display: none; flex-direction: column; gap: 12px; }
+        .tab-pane.active { display: flex; }
+
+        .option-row { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-size: 15px; 
+            color: #ddd; 
+        }
+        
+        input[type="checkbox"] { 
+            accent-color: var(--roxo-principal); 
+            width: 18px; 
+            height: 18px; 
+            cursor: pointer; 
+        }
+
+        /* Botão Injetar Estilo image.png */
+        .btn-action {
+            margin-top: auto; 
+            background: var(--roxo-principal); 
+            color: white; 
+            border: none;
+            padding: 14px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            transition: 0.3s;
+        }
+        
+        .btn-action:hover { filter: brightness(1.2); transform: scale(1.02); }
+    </style>
+</head>
+<body>
+
+<div class="painel">
+    <div class="sidebar">
+        <div class="tab-link active" onclick="openCity(event, 'aim')">Aimbot</div>
+        <div class="tab-link" onclick="openCity(event, 'sys')">Sistem</div>
+        <div class="tab-link" onclick="openCity(event, 'arm')">Armas</div>
+        <div class="tab-link" onclick="openCity(event, 'inf')">Info</div>
+    </div>
+
+    <div class="main-content">
+        <div class="header-title"><h3>nielffz</h3></div>
+
+        <div id="aim" class="tab-pane active">
+            <div class="option-row"><input type="checkbox"> Ativar Aimbot</div>
+            <div class="option-row"><input type="checkbox"> Mira não Pinar</div>
+            <div class="option-row"><input type="checkbox"> Lock Head (Cabeça)</div>
+            <div class="option-row"><input type="checkbox"> Exibir FOV</div>
+        </div>
+
+        <div id="sys" class="tab-pane">
+            <div class="option-row"><input type="checkbox"> Anti-Ban Atualizado</div>
+            <div class="option-row"><input type="checkbox"> Bypass Security</div>
+            <div class="option-row"><input type="checkbox"> Limpar Logs</div>
+        </div>
+
+        <div id="arm" class="tab-pane">
+            <div class="option-row"><input type="checkbox"> No Recoil</div>
+            <div class="option-row"><input type="checkbox"> Fast Reload</div>
+        </div>
+
+        <div id="inf" class="tab-pane">
+            <p>Desenvolvedor: <b>nielffz</b></p>
+            <p>TikTok oficial: <span style="color: var(--roxo-principal);">@wnielhz</span></p>
+        </div>
+
+        <button class="btn-action" onclick="injetarMod()">INJETAR AGORA <span>→</span></button>
+    </div>
+</div>
+
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-pane");
+        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; tabcontent[i].classList.remove("active"); }
+        tablinks = document.getElementsByClassName("tab-link");
+        for (i = 0; i < tablinks.length; i++) { tablinks[i].className = tablinks[i].className.replace(" active", ""); }
+        document.getElementById(cityName).style.display = "flex";
+        document.getElementById(cityName).classList.add("active");
+        evt.currentTarget.className += " active";
+    }
+
+    function injetarMod() {
+        alert("Injetando nielffz... Iniciando Free Fire!");
+        // Comando para abrir o Free Fire no Android através do navegador
+        window.location.href = "intent:#Intent;component=com.dts.freefireth/com.dts.freefireth.MainActivity;end";
+    }
+</script>
+</body>
+</html>
